@@ -1,0 +1,16 @@
+.formularioDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40vh;
+  margin: 1rem 0;
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  gap: 1rem;
+  min-width: 20vw;
+}
