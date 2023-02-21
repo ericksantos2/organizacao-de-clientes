@@ -1,0 +1,9 @@
+.input {
+  width: 100%;
+  &__array {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+}
