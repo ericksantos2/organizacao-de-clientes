@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import CadastroContato from "./components/CadastroContato";
+import Contatos from './components/Contatos';
 import { IContato } from './types/IContato';
 
 function App() {
@@ -21,6 +22,9 @@ function App() {
         cep={{valor: cep, setValor: setCep, tipo: 'normal'}}
         contatos={contatos}
         setContatos={setContatos}
+      />
+      <Contatos
+        contatos={contatos}
       />
     </>
   )
