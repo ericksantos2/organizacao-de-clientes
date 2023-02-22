@@ -15,6 +15,7 @@
     "@mui/material": "^5.11.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.7.1",
     "reset.css": "^2.0.2",
     "sass": "^1.58.0"
   },
