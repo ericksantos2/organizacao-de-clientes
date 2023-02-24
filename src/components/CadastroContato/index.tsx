@@ -33,17 +33,36 @@ export default function CadastroContato({
       cnpj.valor != undefined &&
       cep.valor != undefined
     ) {
+      let id;
+      let numero = 0;
+      while (id === undefined) {
+        if ((contatos.findIndex((contato) => contato.id === numero)) === -1) {
+          id = numero;
+        } else {
+          numero++;
+        }
+      }
       const contato: IContato = {
         nome: nome.valor,
         emails: emails.valores,
         numeros: numeros.valores,
         cnpj: cnpj.valor,
         cep: cep.valor,
+        id: id
       };
       setContatos([...contatos, contato]);
-      console.log(contatos);
     } else {
       throw Error('Erro no uso da função handleSubmit.');
+    }
+  }
+
+  function handleReset() {
+    const algo = confirm('Você realmente deseja remover todos os contatos?');
+    if (algo === true) {
+      localStorage.setItem('contatosBackup', JSON.stringify(contatos));
+      localStorage.removeItem('contatos');
+      setContatos([]);
+      alert('Os contatos foram removidos com sucesso!');
     }
   }
   return (
@@ -51,13 +70,22 @@ export default function CadastroContato({
       <Paper elevation={3} className={styles.formulario}>
         <InputsFormulario inputs={inputs} />
         <Button
-          variant='outlined'
+          variant='contained'
           sx={{ width: '100%', minHeight: '3.5rem' }}
           onClick={() => {
             handleSubmit();
           }}
         >
           Enviar
+        </Button>
+        <Button
+          variant='outlined'
+          sx={{ width: '100%', minHeight: '3.5rem' }}
+          onClick={() => {
+            handleReset();
+          }}
+        >
+          Redefinir
         </Button>
       </Paper>
     </div>
