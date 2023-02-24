@@ -16,12 +16,14 @@ function textoCardArray(nome: string, array: string[]) {
         {nome}: {array[0]}
       </p>
     );
-  } else {
+  } else if (array.length > 1) {
     return array.map((item, index) => (
       <p key={index}>
         {nome} {index + 1}: {item}
       </p>
     ));
+  } else {
+    return
   }
 }
 
@@ -76,14 +78,21 @@ export default function Contatos({ contatos, setContatos }: Props) {
         </div>
         <div className={styles.contatos}>
           {itens.map((contato, index) => {
+            function Texto({texto, children}: {children: string, texto: string}) {
+              if (children) {
+                return <p>{texto}: {children}</p>
+              } else {
+                return null;
+              }
+            }
             return (
               <Paper elevation={3} key={index} className={styles.contato}>
                 <p>Nome: {contato.nome}</p>
-                <p>Nome da Empresa: {contato.nomeEmpresa}</p>
-                {textoCardArray('Email', contato.emails)}
-                {textoCardArray('Número', contato.numeros)}
-                <p>CNPJ: {contato.cnpj}</p>
-                <p>CEP: {contato.cep}</p>
+                {<Texto texto='Nome da Empresa'>{contato.nomeEmpresa ? contato.nomeEmpresa : ''}</Texto>}
+                {textoCardArray('Email', contato.emails ? contato.emails : [])}
+                {textoCardArray('Número', contato.numeros ? contato.numeros : [])}
+                {<Texto texto='CNPJ'>{contato.cnpj ? contato.cnpj : ''}</Texto>}
+                {<Texto texto='CEP'>{contato.cep ? contato.cep : ''}</Texto>}
                 <Button
                   variant='outlined'
                   className={styles.contato__botao}
