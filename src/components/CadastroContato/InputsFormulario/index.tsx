@@ -18,12 +18,33 @@ function handleValue(
   }
 }
 
-export default function InputsFormulario({ inputs }: { inputs: Inputs }) {
-  const nomes: string[] = ['Nome', 'Nome da Empresa', 'Email', 'Numero', 'CNPJ', 'CEP'];
+export default function InputsFormulario({ inputs, erro = false }: { inputs: Inputs, erro: boolean }) {
+  const nomes: string[] = [
+    'Nome',
+    'Nome da Empresa',
+    'Email',
+    'Numero',
+    'CNPJ',
+    'CEP',
+  ];
   return (
     <>
       {inputs.map((item, index) => {
-        if (item.tipo === 'normal') {
+        if (index === 0) {
+          return (
+            <TextField
+              key={index}
+              label={nomes[index]}
+              value={item.valor ? item.valor : ''}
+              onChange={(evento) => {
+                item.setValor ? item.setValor(evento.target.value) : '';
+              }}
+              className={styles.input}
+              error={erro === true ? true : false}
+              required
+            />
+          );
+        } else if (item.tipo === 'normal') {
           return (
             <TextField
               key={index}
