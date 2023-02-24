@@ -17,6 +17,7 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+
   &__input {
     line-height: 1.25rem;
     padding: 1rem 2rem;
@@ -26,6 +27,7 @@
     font-size: 16px;
     font-weight: 400;
   }
+
   margin-bottom: 1rem;
 }
 
@@ -34,9 +36,27 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
-  
+
   .contato {
-    padding: 1rem;
+    $padding: 1rem;
+    padding: $padding;
+    padding-right: calc($padding * 3);
     min-width: 10vw;
+    position: relative;
+
+    &__botao {
+      $tamanho: 20px;
+      padding: 0;
+      min-width: $tamanho;
+      min-height: $tamanho;
+      width: $tamanho;
+      height: $tamanho;
+      border-radius: 100%;
+      position: absolute;
+      top: 0;
+      right: 0;
+      margin: $padding;
+      font-weight: 400;
+    }
   }
 }
