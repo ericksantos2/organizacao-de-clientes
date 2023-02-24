@@ -5,6 +5,10 @@ body {
 }
 
 #root {
+  display: flex;
+  flex-direction: column;
   width: 100vw;
   min-height: 100vh;
+  gap: 3rem;
+  margin: 2rem 0;
 }
