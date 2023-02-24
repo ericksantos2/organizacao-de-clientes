@@ -4,6 +4,7 @@ import { Button, Paper } from '@mui/material';
 import { Inputs } from '../../types/Inputs';
 import InputsFormulario from './InputsFormulario';
 import { IContato } from '../../types/IContato';
+import OutrasOpcoes from './OutrasOpcoes';
 
 interface Props {
   nome: IState;
@@ -59,16 +60,6 @@ export default function CadastroContato({
       throw Error('Erro no uso da função handleSubmit.');
     }
   }
-
-  function handleReset() {
-    const algo = confirm('Você realmente deseja remover todos os contatos?');
-    if (algo === true) {
-      localStorage.setItem('contatosBackup', JSON.stringify(contatos));
-      localStorage.removeItem('contatos');
-      setContatos([]);
-      alert('Os contatos foram removidos com sucesso!');
-    }
-  }
   return (
     <div className={styles.formularioDiv}>
       <Paper elevation={3} className={styles.formulario}>
@@ -82,15 +73,7 @@ export default function CadastroContato({
         >
           Enviar
         </Button>
-        <Button
-          variant='outlined'
-          sx={{ width: '100%', minHeight: '3.5rem' }}
-          onClick={() => {
-            handleReset();
-          }}
-        >
-          Redefinir
-        </Button>
+        <OutrasOpcoes contatos={contatos} setContatos={setContatos}/>
       </Paper>
     </div>
   );
