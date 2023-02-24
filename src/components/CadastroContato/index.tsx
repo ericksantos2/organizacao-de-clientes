@@ -7,6 +7,7 @@ import { IContato } from '../../types/IContato';
 
 interface Props {
   nome: IState;
+  nomeEmpresa: IState;
   emails: IState;
   numeros: IState;
   cnpj: IState;
@@ -17,6 +18,7 @@ interface Props {
 
 export default function CadastroContato({
   nome,
+  nomeEmpresa,
   emails,
   numeros,
   cnpj,
@@ -24,19 +26,20 @@ export default function CadastroContato({
   contatos,
   setContatos,
 }: Props) {
-  const inputs: Inputs = [nome, emails, numeros, cnpj, cep];
+  const inputs: Inputs = [nome, nomeEmpresa, emails, numeros, cnpj, cep];
   function handleSubmit() {
     if (
-      nome.valor != undefined &&
-      emails.valores != undefined &&
-      numeros.valores != undefined &&
-      cnpj.valor != undefined &&
-      cep.valor != undefined
+      nome.valor !== undefined &&
+      nomeEmpresa.valor !== undefined &&
+      emails.valores !== undefined &&
+      numeros.valores !== undefined &&
+      cnpj.valor !== undefined &&
+      cep.valor !== undefined
     ) {
       let id;
       let numero = 0;
       while (id === undefined) {
-        if ((contatos.findIndex((contato) => contato.id === numero)) === -1) {
+        if (contatos.findIndex((contato) => contato.id === numero) === -1) {
           id = numero;
         } else {
           numero++;
@@ -44,11 +47,12 @@ export default function CadastroContato({
       }
       const contato: IContato = {
         nome: nome.valor,
+        nomeEmpresa: nomeEmpresa.valor,
         emails: emails.valores,
         numeros: numeros.valores,
         cnpj: cnpj.valor,
         cep: cep.valor,
-        id: id
+        id: id,
       };
       setContatos([...contatos, contato]);
     } else {

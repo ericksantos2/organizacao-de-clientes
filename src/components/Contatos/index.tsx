@@ -38,7 +38,7 @@ export default function Contatos({ contatos, setContatos }: Props) {
     }
     const listaContatos: { string: string; id: number }[] = [];
     contatos.forEach((contato, index) => {
-      let string = `${contato.nome}${contato.cnpj}${contato.cep}`;
+      let string = `${contato.nome}${contato.nomeEmpresa}${contato.cnpj}${contato.cep}`;
       [contato.emails, contato.numeros].forEach(
         (item) => (string += `${item}`)
       );
@@ -79,6 +79,7 @@ export default function Contatos({ contatos, setContatos }: Props) {
             return (
               <Paper elevation={3} key={index} className={styles.contato}>
                 <p>Nome: {contato.nome}</p>
+                <p>Nome da Empresa: {contato.nomeEmpresa}</p>
                 {textoCardArray('Email', contato.emails)}
                 {textoCardArray('Número', contato.numeros)}
                 <p>CNPJ: {contato.cnpj}</p>

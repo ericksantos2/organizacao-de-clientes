@@ -5,6 +5,7 @@ import { IContato } from './types/IContato';
 
 function App() {
   const [nome, setNome] = useState<string>('');
+  const [nomeEmpresa, setNomeEmpresa] = useState<string>('');
   const [emails, setEmails] = useState<string[]>(['']);
   const [numeros, setNumeros] = useState<string[]>(['']);
   const [cnpj, setCnpj] = useState<string>('');
@@ -27,6 +28,7 @@ function App() {
     <>
       <CadastroContato
         nome={{ valor: nome, setValor: setNome, tipo: 'normal' }}
+        nomeEmpresa={{ valor: nomeEmpresa, setValor: setNomeEmpresa, tipo: 'normal'}}
         emails={{ valores: emails, setValores: setEmails, tipo: 'array' }}
         numeros={{ valores: numeros, setValores: setNumeros, tipo: 'array' }}
         cnpj={{ valor: cnpj, setValor: setCnpj, tipo: 'normal' }}

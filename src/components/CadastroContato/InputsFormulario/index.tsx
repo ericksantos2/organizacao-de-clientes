@@ -19,7 +19,7 @@ function handleValue(
 }
 
 export default function InputsFormulario({ inputs }: { inputs: Inputs }) {
-  const nomes: string[] = ['Nome', 'Email', 'Numero', 'CNPJ', 'CEP'];
+  const nomes: string[] = ['Nome', 'Nome da Empresa', 'Email', 'Numero', 'CNPJ', 'CEP'];
   return (
     <>
       {inputs.map((item, index) => {
