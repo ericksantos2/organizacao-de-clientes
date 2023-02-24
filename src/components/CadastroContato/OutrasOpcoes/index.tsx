@@ -68,15 +68,11 @@ export default function OutrasOpcoes({
       );
       if (
         importConvertido[0].nome !== undefined &&
-        importConvertido[0].nomeEmpresa !== undefined &&
-        importConvertido[0].emails !== undefined &&
-        importConvertido[0].numeros !== undefined &&
-        importConvertido[0].cnpj !== undefined &&
-        importConvertido[0].cep !== undefined
+        importConvertido[0].id !== undefined
       ) {
         setContatos(importConvertido);
       } else {
-        throw Error('Ocorreu um erro.');
+        alert('A importação não foi bem sucedida. Ocorreu um erro.');
       }
     }
   }
