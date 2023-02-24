@@ -41,6 +41,7 @@ export default function InputsFormulario({ inputs, erro = false }: { inputs: Inp
               }}
               className={styles.input}
               error={erro === true ? true : false}
+              helperText="Campo obrigatório"
               required
             />
           );
