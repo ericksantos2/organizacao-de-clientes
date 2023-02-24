@@ -3,5 +3,6 @@ export interface IContato {
   emails: string[],
   numeros: string[],
   cnpj: string,
-  cep: string
+  cep: string,
+  id: number
 }
