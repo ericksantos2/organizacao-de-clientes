@@ -12,5 +12,6 @@ export default defineConfig({
         replacement: path.resolve(__dirname, 'src'),
       }
     ]
-  }
+  },
+  base: "organizacao-de-clientes",
 })
