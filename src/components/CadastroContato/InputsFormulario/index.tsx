@@ -18,7 +18,13 @@ function handleValue(
   }
 }
 
-export default function InputsFormulario({ inputs, erro = false }: { inputs: Inputs, erro: boolean }) {
+export default function InputsFormulario({
+  inputs,
+  erro = false,
+}: {
+  inputs: Inputs;
+  erro: boolean;
+}) {
   const nomes: string[] = [
     'Nome',
     'Nome da Empresa',
@@ -41,7 +47,7 @@ export default function InputsFormulario({ inputs, erro = false }: { inputs: Inp
               }}
               className={styles.input}
               error={erro === true ? true : false}
-              helperText="Campo obrigatório"
+              helperText={erro === true ? 'Campo obrigatório' : ''}
               required
             />
           );
