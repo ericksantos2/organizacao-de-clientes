@@ -1,0 +1,13 @@
+.rodape {
+  display: flex;
+  justify-content: center;
+  &__link {
+    text-decoration: none;
+    color: rgb(70, 70, 70);
+    border-bottom: 1px solid rgba(70, 70, 70, 0);
+  }
+  &__link:hover {
+    transition: 0.7s;
+    border-bottom: 1px solid rgba(70, 70, 70, 100);
+  }
+}
