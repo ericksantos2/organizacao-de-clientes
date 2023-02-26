@@ -34,6 +34,7 @@ export default function Contatos({ contatos, setContatos }: Props) {
     setItens(contatos);
   }, [contatos]);
   function handlePesquisa(pesquisa: string) {
+    pesquisa = pesquisa.replace(/[./-]/g, '');
     if (pesquisa === '') {
       setItens(contatos);
       return;
@@ -44,6 +45,7 @@ export default function Contatos({ contatos, setContatos }: Props) {
       [contato.emails, contato.numeros].forEach(
         (item) => (string += `${item}`)
       );
+      string = string.replace(/[./-]/g, '');
       const objeto = {
         string: string.toLowerCase(),
         id: index,
