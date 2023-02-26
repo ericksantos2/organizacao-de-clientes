@@ -18,6 +18,8 @@ function handleValue(
   }
 }
 
+let valorAntes = '';
+
 export default function InputsFormulario({
   inputs,
   erro = false,
@@ -33,6 +35,17 @@ export default function InputsFormulario({
     'CNPJ',
     'CEP',
   ];
+  function cnpjMask(value: string) {
+    // Eu sei que talvez dê pra usar expressões regulares, mas assim fica mais simples
+    if (!value) return ''
+    value = value.replace(/[a-zA-Zç]/g, '')
+    if ((valorAntes.length === 1 && value.length === 2) || (valorAntes.length === 5 && value.length === 6)) {value += '.'};
+    if (valorAntes.length === 9 && value.length === 10) {value += '/'};
+    if (valorAntes.length === 14 && value.length === 15) {value += '-'};
+    if (value.length >= 18) {return value.substring(0,18)};
+    valorAntes = value;
+    return value;
+  }
   return (
     <>
       {inputs.map((item, index) => {
@@ -51,6 +64,21 @@ export default function InputsFormulario({
               required
             />
           );
+        } else if (nomes[index] === 'CNPJ') {
+          return (
+            <TextField
+              className={styles.input}
+              label={nomes[index]}
+              value={item.valor}
+              onChange={(evento) => {
+                if (item.setValor) {
+                  let input = evento.target.value;
+                  input = cnpjMask(input);
+                  item.setValor(input);
+                }
+              }}
+            />
+          )
         } else if (item.tipo === 'normal') {
           return (
             <TextField
