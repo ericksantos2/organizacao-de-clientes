@@ -3,11 +3,11 @@
   justify-content: center;
   &__link {
     text-decoration: none;
-    color: rgb(70, 70, 70);
-    border-bottom: 1px solid rgba(70, 70, 70, 0);
+    color: rgb(27, 27, 27);
+    border-bottom: 1px solid rgba(27, 27, 27, 0);
   }
   &__link:hover {
     transition: 0.7s;
-    border-bottom: 1px solid rgba(70, 70, 70, 100);
+    border-bottom: 1px solid rgba(27, 27, 27, 100);
   }
 }
