@@ -1,7 +1,6 @@
 import styles from './CadastroContato.module.scss';
 import { IState } from '../../types/IState';
 import { Button, Paper } from '@mui/material';
-import { Inputs } from '../../types/Inputs';
 import InputsFormulario from './InputsFormulario';
 import { IContato } from '../../types/IContato';
 import OutrasOpcoes from './OutrasOpcoes';
@@ -18,6 +17,18 @@ interface Props {
   setContatos: React.Dispatch<React.SetStateAction<IContato[]>>;
 }
 
+function mask(value: string, tipo: 'numero' | 'cnpj' | 'cep', maximo: number): string {
+  if (!value) return '';
+  value = value.replace(/[a-zA-Zç]/g, '');
+  if (value.length >= maximo) {
+    return value.substring(0, maximo);
+  }
+  if (tipo === 'cnpj') {value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, '$1.$2.$3/$4-$5');}
+  if (tipo === 'cep') {value = value.replace(/^(\d{5})(\d{3})/g, '$1-$2')}
+  if (tipo === 'numero') {value = value.replace(/^(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3')}
+  return value;
+}
+
 export default function CadastroContato({
   nome,
   nomeEmpresa,
@@ -28,7 +39,43 @@ export default function CadastroContato({
   contatos,
   setContatos,
 }: Props) {
-  const inputs: Inputs = [nome, nomeEmpresa, emails, numeros, cnpj, cep];
+  const inputs: IState[] = [
+    {
+      nome: 'nome',
+      texto: 'Nome',
+      ...nome,
+      required: true,
+      temErro: true,
+    },
+    {
+      nome: 'nomeEmpresa',
+      texto: 'Nome da Empresa',
+      ...nomeEmpresa,
+    },
+    {
+      nome: 'emails',
+      texto: 'Email',
+      ...emails,
+    },
+    {
+      nome: 'numeros',
+      texto: 'Número',
+      ...numeros,
+      mascara: (value: string) => {return mask(value, 'numero', 15)},
+    },
+    {
+      nome: 'cnpj',
+      texto: 'CNPJ',
+      ...cnpj,
+      mascara: (value: string) => {return mask(value, 'cnpj', 18)},
+    },
+    {
+      nome: 'cep',
+      texto: 'CEP',
+      ...cep,
+      mascara: (value: string) => {return mask(value, 'cep', 9)},
+    },
+  ];
   const [erro, setErro] = useState(false);
   if (erro === true) {
     if (nome.valor !== '') {
@@ -68,10 +115,10 @@ export default function CadastroContato({
       cep.valor !== '' && (contato.cep = cep.valor);
 
       setContatos([...contatos, contato]);
-      inputs.forEach((item) => {
+      inputs.forEach((item: any) => {
         item.setValor ? item.setValor('') : '';
         item.setValores ? item.setValores(['']) : '';
-      })
+      });
     } else {
       throw Error('Erro no uso da função handleSubmit.');
     }
@@ -89,7 +136,7 @@ export default function CadastroContato({
         >
           Enviar
         </Button>
-        <OutrasOpcoes contatos={contatos} setContatos={setContatos}/>
+        <OutrasOpcoes contatos={contatos} setContatos={setContatos} />
       </Paper>
     </div>
   );
