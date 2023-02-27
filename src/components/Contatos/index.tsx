@@ -34,18 +34,21 @@ export default function Contatos({ contatos, setContatos }: Props) {
     setItens(contatos);
   }, [contatos]);
   function handlePesquisa(pesquisa: string) {
-    pesquisa = pesquisa.replace(/[./-]/g, '');
+    pesquisa = pesquisa.replace(/[./\-/(/)]/g, '');
+    pesquisa = pesquisa.replace(/\s/g, '');
     if (pesquisa === '') {
       setItens(contatos);
       return;
     }
     const listaContatos: { string: string; id: number }[] = [];
     contatos.forEach((contato, index) => {
-      let string = `${contato.nome}${contato.nomeEmpresa}${contato.cnpj}${contato.cep}`;
+      let string = '';
+      [contato.nome, contato.nomeEmpresa, contato.cnpj, contato.cep].forEach((item) => {item !== undefined && (string += `${item}`)});
       [contato.emails, contato.numeros].forEach(
-        (item) => (string += `${item}`)
+        (item) => {item !== undefined && (string += `${item}`)}
       );
-      string = string.replace(/[./-]/g, '');
+      string = string.replace(/[./\-/(/)]/g, '');
+      string = string.replace(/\s/g, '');
       const objeto = {
         string: string.toLowerCase(),
         id: index,
