@@ -1,13 +1,10 @@
 import { Button, Paper } from '@mui/material';
 import { IContato } from '../../types/IContato';
 import styles from './Contatos.module.scss';
-import { SetStateAction, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RiCloseFill } from 'react-icons/ri';
-
-interface Props {
-  contatos: IContato[];
-  setContatos: React.Dispatch<SetStateAction<IContato[]>>;
-}
+import { useRecoilState } from 'recoil';
+import { contatosState } from '../../state/atom';
 
 function textoCardArray(nome: string, array: string[]) {
   if (array.length === 1) {
@@ -23,12 +20,12 @@ function textoCardArray(nome: string, array: string[]) {
       </p>
     ));
   } else {
-    return
+    return;
   }
 }
 
-export default function Contatos({ contatos, setContatos }: Props) {
-  const tamanho = '35px';
+export default function Contatos() {
+  const [contatos, setContatos] = useRecoilState(contatosState);
   const [itens, setItens] = useState<IContato[]>(contatos);
   useEffect(() => {
     setItens(contatos);
@@ -43,10 +40,14 @@ export default function Contatos({ contatos, setContatos }: Props) {
     const listaContatos: { string: string; id: number }[] = [];
     contatos.forEach((contato, index) => {
       let string = '';
-      [contato.nome, contato.nomeEmpresa, contato.cnpj, contato.cep].forEach((item) => {item !== undefined && (string += `${item}`)});
-      [contato.emails, contato.numeros].forEach(
-        (item) => {item !== undefined && (string += `${item}`)}
+      [contato.nome, contato.nomeEmpresa, contato.cnpj, contato.cep].forEach(
+        (item) => {
+          item !== undefined && (string += `${item}`);
+        }
       );
+      [contato.emails, contato.numeros].forEach((item) => {
+        item !== undefined && (string += `${item}`);
+      });
       string = string.replace(/[./\-/(/)]/g, '');
       string = string.replace(/\s/g, '');
       const objeto = {
@@ -64,7 +65,9 @@ export default function Contatos({ contatos, setContatos }: Props) {
   }
   function handleBotaoExcluir(id: number) {
     let contatosComAlteracao = [...contatos];
-    const lugar = contatosComAlteracao.findIndex((contato) => contato.id === id);
+    const lugar = contatosComAlteracao.findIndex(
+      (contato) => contato.id === id
+    );
     if (lugar === undefined || lugar === null)
       throw Error('ID do contato incorreto!');
     contatosComAlteracao.splice(lugar, 1);
@@ -83,9 +86,19 @@ export default function Contatos({ contatos, setContatos }: Props) {
         </div>
         <div className={styles.contatos}>
           {itens.map((contato, index) => {
-            function Texto({texto, children}: {children: string, texto: string}) {
+            function Texto({
+              texto,
+              children,
+            }: {
+              children: string;
+              texto: string;
+            }) {
               if (children) {
-                return <p>{texto}: {children}</p>
+                return (
+                  <p>
+                    {texto}: {children}
+                  </p>
+                );
               } else {
                 return null;
               }
@@ -93,9 +106,16 @@ export default function Contatos({ contatos, setContatos }: Props) {
             return (
               <Paper elevation={3} key={index} className={styles.contato}>
                 <p>Nome: {contato.nome}</p>
-                {<Texto texto='Nome da Empresa'>{contato.nomeEmpresa ? contato.nomeEmpresa : ''}</Texto>}
+                {
+                  <Texto texto='Nome da Empresa'>
+                    {contato.nomeEmpresa ? contato.nomeEmpresa : ''}
+                  </Texto>
+                }
                 {textoCardArray('Email', contato.emails ? contato.emails : [])}
-                {textoCardArray('Número', contato.numeros ? contato.numeros : [])}
+                {textoCardArray(
+                  'Número',
+                  contato.numeros ? contato.numeros : []
+                )}
                 {<Texto texto='CNPJ'>{contato.cnpj ? contato.cnpj : ''}</Texto>}
                 {<Texto texto='CEP'>{contato.cep ? contato.cep : ''}</Texto>}
                 <Button

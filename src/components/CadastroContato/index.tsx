@@ -4,115 +4,144 @@ import { Button, Paper } from '@mui/material';
 import InputsFormulario from './InputsFormulario';
 import { IContato } from '../../types/IContato';
 import OutrasOpcoes from './OutrasOpcoes';
-import { useState } from 'react';
+import { SetStateAction, useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import {
+  cepState,
+  cnpjState,
+  contatosState,
+  emailsState,
+  nomeEmpresaState,
+  nomeState,
+  numerosState,
+} from '../../state/atom';
+import achaId from '../../utils/achaId';
 
-interface Props {
-  nome: IState;
-  nomeEmpresa: IState;
-  emails: IState;
-  numeros: IState;
-  cnpj: IState;
-  cep: IState;
-  contatos: IContato[];
-  setContatos: React.Dispatch<React.SetStateAction<IContato[]>>;
-}
-
-function mask(value: string, tipo: 'numero' | 'cnpj' | 'cep', maximo: number): string {
+function mask(
+  value: string,
+  tipo: 'numero' | 'cnpj' | 'cep',
+  maximo: number
+): string {
   if (!value) return '';
   value = value.replace(/[a-zA-Zç]/g, '');
   if (value.length >= maximo) {
     return value.substring(0, maximo);
   }
-  if (tipo === 'cnpj') {value = value.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, '$1.$2.$3/$4-$5');}
-  if (tipo === 'cep') {value = value.replace(/^(\d{5})(\d{3})/g, '$1-$2')}
-  if (tipo === 'numero') {value = value.replace(/^(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3')}
+  if (tipo === 'cnpj') {
+    value = value.replace(
+      /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g,
+      '$1.$2.$3/$4-$5'
+    );
+  }
+  if (tipo === 'cep') {
+    value = value.replace(/^(\d{5})(\d{3})/g, '$1-$2');
+  }
+  if (tipo === 'numero') {
+    value = value.replace(/^(\d{2})(\d{5})(\d{4})/g, '($1) $2-$3');
+  }
   return value;
 }
 
-export default function CadastroContato({
-  nome,
-  nomeEmpresa,
-  emails,
-  numeros,
-  cnpj,
-  cep,
-  contatos,
-  setContatos,
-}: Props) {
+export default function CadastroContato() {
+  const [contatos, setContatos]: [
+    contatos: IContato[],
+    setContatos: React.Dispatch<SetStateAction<IContato[]>>
+  ] = useRecoilState(contatosState);
+
+  useEffect(() => {
+    localStorage.setItem('contatos', JSON.stringify(contatos));
+  }, [contatos]);
+
+  const [nome, setNome] = useRecoilState(nomeState);
+  const [nomeEmpresa, setNomeEmpresa] = useRecoilState(nomeEmpresaState);
+  const [emails, setEmails] = useRecoilState(emailsState);
+  const [numeros, setNumeros] = useRecoilState(numerosState);
+  const [cnpj, setCnpj] = useRecoilState(cnpjState);
+  const [cep, setCep] = useRecoilState(cepState);
+
   const inputs: IState[] = [
     {
       nome: 'nome',
       texto: 'Nome',
-      ...nome,
       required: true,
       temErro: true,
+      valor: nome,
+      setValor: setNome,
+      tipo: 'normal',
     },
     {
       nome: 'nomeEmpresa',
       texto: 'Nome da Empresa',
-      ...nomeEmpresa,
+      valor: nomeEmpresa,
+      setValor: setNomeEmpresa,
+      tipo: 'normal',
     },
     {
       nome: 'emails',
       texto: 'Email',
-      ...emails,
+      valores: emails,
+      setValores: setEmails,
+      tipo: 'array',
     },
     {
       nome: 'numeros',
       texto: 'Número',
-      ...numeros,
-      mascara: (value: string) => {return mask(value, 'numero', 15)},
+      mascara: (value: string) => {
+        return mask(value, 'numero', 15);
+      },
+      valores: numeros,
+      setValores: setNumeros,
+      tipo: 'array',
     },
     {
       nome: 'cnpj',
       texto: 'CNPJ',
-      ...cnpj,
-      mascara: (value: string) => {return mask(value, 'cnpj', 18)},
+      mascara: (value: string) => {
+        return mask(value, 'cnpj', 18);
+      },
+      valor: cnpj,
+      setValor: setCnpj,
+      tipo: 'normal',
     },
     {
       nome: 'cep',
       texto: 'CEP',
-      ...cep,
-      mascara: (value: string) => {return mask(value, 'cep', 9)},
+      mascara: (value: string) => {
+        return mask(value, 'cep', 9);
+      },
+      valor: cep,
+      setValor: setCep,
+      tipo: 'normal',
     },
   ];
   const [erro, setErro] = useState(false);
   if (erro === true) {
-    if (nome.valor !== '') {
+    if (nome !== '') {
       setErro(false);
     }
   }
   function handleSubmit() {
-    if (nome.valor === '') {
+    if (nome === '') {
       setErro(true);
       return;
     }
     if (
-      nome.valor !== undefined &&
-      nomeEmpresa.valor !== undefined &&
-      emails.valores !== undefined &&
-      numeros.valores !== undefined &&
-      cnpj.valor !== undefined &&
-      cep.valor !== undefined
+      inputs.map((item) =>
+        item.tipo === 'normal'
+          ? item.valor !== undefined
+          : item.valores !== undefined
+      )
     ) {
-      let id;
-      let numero = 0;
-      while (id === undefined) {
-        if (contatos.findIndex((contato) => contato.id === numero) === -1) {
-          id = numero;
-        } else {
-          numero++;
-        }
-      }
+      let id = achaId(contatos);
       let contato: IContato = {
-        nome: nome.valor,
+        nome: nome,
         id: id,
       };
-      nomeEmpresa.valor !== '' && (contato.nomeEmpresa = nomeEmpresa.valor);
-      emails.valores[0] !== '' && (contato.emails = emails.valores);
-      numeros.valores[0] !== '' && (contato.numeros = numeros.valores);
-      cnpj.valor !== '' && (contato.cnpj = cnpj.valor);
-      cep.valor !== '' && (contato.cep = cep.valor);
+      nomeEmpresa !== '' && (contato.nomeEmpresa = nomeEmpresa);
+      emails[0] !== '' && (contato.emails = emails);
+      numeros[0] !== '' && (contato.numeros = numeros);
+      cnpj !== '' && (contato.cnpj = cnpj);
+      cep !== '' && (contato.cep = cep);
 
       setContatos([...contatos, contato]);
       inputs.forEach((item: IState) => {
