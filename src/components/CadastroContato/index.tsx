@@ -115,7 +115,7 @@ export default function CadastroContato({
       cep.valor !== '' && (contato.cep = cep.valor);
 
       setContatos([...contatos, contato]);
-      inputs.forEach((item: any) => {
+      inputs.forEach((item: IState) => {
         item.setValor ? item.setValor('') : '';
         item.setValores ? item.setValores(['']) : '';
       });
