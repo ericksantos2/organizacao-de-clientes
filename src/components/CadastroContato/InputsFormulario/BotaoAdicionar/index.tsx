@@ -2,51 +2,35 @@ import { Button } from '@mui/material';
 import { IState } from '../../../../types/IState';
 
 export default function Botao({
-  disabled = false,
+  desabilitado,
   onClick,
   children,
 }: {
-  disabled: 'true' | 'false' | boolean;
+  desabilitado: {valor: string[], tipo: 'maior' | 'igual', numero: number}
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   children: string;
 }) {
   const tamanho: string = '30px';
-  if (disabled === true || disabled === 'true') {
-    return (
-      <Button
-        variant='contained'
-        sx={{
-          borderRadius: '50%',
-          minWidth: tamanho,
-          minHeight: tamanho,
-          width: tamanho,
-          height: tamanho,
-        }}
-        onClick={onClick}
-        disabled
-      >
-        {children}
-      </Button>
-    );
-  } else if (disabled === false || disabled === 'false') {
-    return (
-      <Button
-        variant='contained'
-        sx={{
-          borderRadius: '50%',
-          minWidth: tamanho,
-          minHeight: tamanho,
-          width: tamanho,
-          height: tamanho,
-        }}
-        onClick={onClick}
-      >
-        {children}
-      </Button>
-    );
-  } else {
-    throw Error('Uso incorreto do componente Botao');
+  function comparacaoDisabled(item: string[], tipo: 'maior' | 'igual', numero: number): boolean {
+    if (tipo === 'maior') {return item.length >= numero}
+    else if (tipo === 'igual') {return item.length === numero}
+    else {
+      throw Error();
+    }
   }
+  return (
+    <Button variant='contained'
+      sx={{
+        borderRadius: '50%',
+          minWidth: tamanho,
+          minHeight: tamanho,
+          width: tamanho,
+          height: tamanho,
+      }}
+      onClick={onClick}
+      disabled={comparacaoDisabled(desabilitado.valor, desabilitado.tipo, desabilitado.numero)}
+    >{children}</Button>
+  )
 }
 
 export function handleBotaoAdicionar(
